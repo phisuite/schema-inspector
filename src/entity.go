@@ -8,13 +8,13 @@ import (
 )
 
 type entityServer struct {
-	schema.UnimplementedEntityAPIServer
+	schema.UnimplementedEntityReadAPIServer
 }
 
-func (e entityServer) List(_ *schema.Options, stream schema.EntityAPI_ListServer) error {
+func (e entityServer) List(_ *schema.Options, stream schema.EntityReadAPI_ListServer) error {
 	for i := 1; i < 5; i++ {
 		version := fmt.Sprintf("0.0.%d", i)
-		entity := &schema.Entity{Name:"dummy", Version:version}
+		entity := &schema.Entity{Name: "dummy", Version: version}
 		log.Printf("Stream: %v", entity)
 		if err := stream.Send(entity); err != nil {
 			return err
@@ -24,7 +24,7 @@ func (e entityServer) List(_ *schema.Options, stream schema.EntityAPI_ListServer
 }
 
 func (e entityServer) Get(context.Context, *schema.Options) (*schema.Entity, error) {
-	entity := &schema.Entity{Name:"dummy", Version:"0.0.1"}
+	entity := &schema.Entity{Name: "dummy", Version: "0.0.1"}
 	log.Printf("Send: %v", entity)
 	return entity, nil
 }

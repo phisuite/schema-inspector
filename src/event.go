@@ -8,13 +8,13 @@ import (
 )
 
 type eventServer struct {
-	schema.UnimplementedEventAPIServer
+	schema.UnimplementedEventReadAPIServer
 }
 
-func (e eventServer) List(_ *schema.Options, stream schema.EventAPI_ListServer) error {
+func (e eventServer) List(_ *schema.Options, stream schema.EventReadAPI_ListServer) error {
 	for i := 1; i < 5; i++ {
 		version := fmt.Sprintf("0.0.%d", i)
-		event := &schema.Event{Name:"dummy", Version:version}
+		event := &schema.Event{Name: "dummy", Version: version}
 		log.Printf("Stream: %v", event)
 		if err := stream.Send(event); err != nil {
 			return err
@@ -24,7 +24,7 @@ func (e eventServer) List(_ *schema.Options, stream schema.EventAPI_ListServer) 
 }
 
 func (e eventServer) Get(context.Context, *schema.Options) (*schema.Event, error) {
-	event := &schema.Event{Name:"dummy", Version:"0.0.1"}
+	event := &schema.Event{Name: "dummy", Version: "0.0.1"}
 	log.Printf("Send: %v", event)
 	return event, nil
 }
